@@ -22,7 +22,6 @@ def hello_name():
 
 
 @app.route('/wave' , methods = ["GET"])
-
 def wave():
     name = request.args["name"]
     return f"I am waving at {name}"
@@ -36,7 +35,6 @@ def wave():
 # It should return the text 'I am waving at [NAME]', where [NAME] is replaced by the value of the name query parameter.
 
 @app.route('/count_vowels', methods = ["POST"])
-
 def count_vowels():
     text_input = request.form["text"]
     count = 0
@@ -44,6 +42,18 @@ def count_vowels():
         if i in "aeiou":
             count += 1
     return f'There are {count} vowels in "{text_input}"'
-    
+
+
+#excercise 2 : sort-names
+
+@app.route('/sort-names', methods = ["POST"])
+def sort_names():
+    if "names" in request.form:
+        names = request.form["names"].split(",")
+        names_sorted = sorted(names)
+        return ",".join(names_sorted)
+    else:
+        return "You have not specified a list!" , 400
+
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))

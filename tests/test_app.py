@@ -78,18 +78,30 @@ def test_post_count_vowels_mercurial(web_client):
 When: I make a POST request to /sort-names
 AND: I send "Joe,Alice,Zoe,Julia,Kieran" 
 THEN : I get a 200 response with the order of the name 
-(as comma,separated values) as "Alice,Joe,Julia,Kieran,Zoe'
+(as comma,separated values) as "Alice,Joe,Julia,Kieran,Zoe"
 '''
 
-
+def test_post_sort_names(web_client):
+    names = "Joe,Alice,Zoe,Julia,Kieran" 
+    response = web_client.post('/sort-names' , data = {"names": names} )
+    assert response.status_code == 200
+    assert response.data.decode("utf-8") == "Alice,Joe,Julia,Kieran,Zoe"
 
 '''
 When: I make a POST request to /sort-names
 AND: I send "Aaaa,Aaa,Aaab,Aaac,Aad" 
 THEN : I get a 200 response with the order of the name 
-(as comma,separated values) as "Aaa,Aad,Aaaa,Aaab,Aaac"
+(as comma,separated values) as "Aaa,Aaaa,Aaab,Aaac,Aad"
 
 '''
+
+
+def test_post_sort_names_starting_letters(web_client):
+    names = "Aaaa,Aaa,Aaab,Aaac,Aad" 
+    response = web_client.post('/sort-names' , data = {"names": names} )
+    assert response.status_code == 200
+    assert response.data.decode("utf-8") == "Aaa,Aaaa,Aaab,Aaac,Aad"
+
 
 
 
@@ -98,3 +110,10 @@ When: I make a POST request to /sort-names
 AND: I send nothing
 THEN : I get a 400 response with "You have not specified a list!"
 '''
+
+
+def test_post_sort_names_no_input(web_client):
+    
+    response = web_client.post('/sort-names' )
+    assert response.status_code == 400
+    assert response.data.decode("utf-8") == "You have not specified a list!"
