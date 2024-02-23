@@ -6,7 +6,7 @@ app = Flask(__name__)
 def hello_name():
     name_input = request.form["name"]
     message_input = request.form["message"]
-    return f"Thanks {name_input}, you sent this message: '{message_input}'"
+    return f'Thanks {name_input}, you sent this message: "{message_input}"'
 
 
 
@@ -35,5 +35,15 @@ def wave():
 # A query parameter name
 # It should return the text 'I am waving at [NAME]', where [NAME] is replaced by the value of the name query parameter.
 
+@app.route('/count_vowels', methods = ["POST"])
+
+def count_vowels():
+    text_input = request.form["text"]
+    count = 0
+    for i in text_input:
+        if i in "aeiou":
+            count += 1
+    return f'There are {count} vowels in "{text_input}"'
+    
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
