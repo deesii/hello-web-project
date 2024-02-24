@@ -117,3 +117,36 @@ def test_post_sort_names_no_input(web_client):
     response = web_client.post('/sort-names' )
     assert response.status_code == 400
     assert response.data.decode("utf-8") == "You have not specified a list!"
+
+
+'''
+# Request:
+When: I make a GET request to /names?add=Eddie (sending a name with Eddie as the parameter)
+
+# This route returns a list of pre-defined names, plus the name Eddie.
+
+# Expected response (2OO OK):
+Julia, Alice, Karim, Eddie
+'''
+
+def test_get_add_name_to_predefined_list(web_client):
+    response = web_client.get('/name?add=Eddie')
+    assert response.status_code == 200
+    assert response.data.decode("utf-8") == "Julia, Alice, Karim, Eddie"
+
+'''
+# Request:
+When: I make a GET request to /names?add= (sending a name with no parameter)
+
+# This route returns the error "No name added!"
+
+# Expected response (400):
+"No name added!"
+'''
+
+def test_get_add_no_name_to_predefined_list(web_client):
+    response = web_client.get('/name')
+    assert response.status_code == 400 
+    assert response.data.decode('utf-8') == "No name added!"
+
+
